@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trigonometria</title>
+    <link rel="stylesheet" href="trigonometria.css">
+</head>
+<body>
+
+<h1>Trigonometria super foda</h1>
+
+<!-- ================= PITÁGORAS ================= -->
+
+<h2>Teorema de Pitágoras</h2>
+<p>Em um triângulo retângulo: c² = a² + b²</p>
+
+<img id="triangulo_retângulo" src="img/triangulo_retangulo.gif">
+<br><br>
+
+<label>Cateto A:</label>
+<input type="number" id="a"><br><br>
+
+<label>Cateto B:</label>
+<input type="number" id="b"><br><br>
+
+<button onclick="calcularPitagoras()">Calcular Hipotenusa</button>
+
+<p id="resultadoPitagoras"></p>
+
+<script>
+function hipotenusa(a, b) {
+    return Math.sqrt(a*a + b*b);
+}
+
+function calcularPitagoras() {
+    const a = parseFloat(document.getElementById("a").value);
+    const b = parseFloat(document.getElementById("b").value);
+
+    if (isNaN(a) || isNaN(b)) {
+        document.getElementById("resultadoPitagoras").textContent = "Digite valores válidos!";
+        return;
+    }
+
+    const c = hipotenusa(a, b);
+    document.getElementById("resultadoPitagoras").textContent = "Hipotenusa: " + c.toFixed(2);
+}
+</script>
+
+<!-- ================= LEI DOS SENOS ================= -->
+
+<h2>Lei dos Senos</h2>
+<p>A Lei dos Senos é uma relação matemática que afirma que, em qualquer triângulo, a razão entre um lado e o seno do ângulo oposto a ele é constante.</p>
+<img id="triangulo_retângulo" src="img/lei-dos-senos.webp"><br><br>
+
+<input id="ladoA" placeholder="Lado A"><br>
+<input id="angA" placeholder="Ângulo A"><br>
+<input id="ladoB" placeholder="Lado B"><br>
+<input id="angB" placeholder="Ângulo B"><br>
+<input id="ladoC" placeholder="Lado C"><br>
+<input id="angC" placeholder="Ângulo C"><br><br>
+
+<button onclick="calcularLeiDosSenos()">Calcular</button>
+
+<pre id="resultadoSeno"></pre>
+
+<script>
+function calcularLeiDosSenos() {
+
+    function val(id) {
+        let v = document.getElementById(id).value.trim();
+        return v ? parseFloat(v) : null;
+    }
+
+    let a = val("ladoA");
+    let A = val("angA");
+    let b = val("ladoB");
+    let B = val("angB");
+    let c = val("ladoC");
+    let C = val("angC");
+
+    if (A == null && B != null && C != null) A = 180 - B - C;
+    else if (B == null && A != null && C != null) B = 180 - A - C;
+    else if (C == null && A != null && B != null) C = 180 - A - B;
+
+    let res = "";
+
+    if (a != null && A != null) {
+        let sA = Math.sin(A * Math.PI / 180);
+
+        if (b == null && B != null) {
+            b = (a * Math.sin(B * Math.PI / 180)) / sA;
+            res += `b = ${b.toFixed(2)}\n`;
+        }
+
+        if (c == null && C != null) {
+            c = (a * Math.sin(C * Math.PI / 180)) / sA;
+            res += `c = ${c.toFixed(2)}\n`;
+        }
+
+        if (b != null && B == null) {
+            B = Math.asin((b * sA) / a) * 180 / Math.PI;
+            res += `Ângulo B = ${B.toFixed(2)}°\n`;
+        }
+
+        if (c != null && C == null) {
+            C = Math.asin((c * sA) / a) * 180 / Math.PI;
+            res += `Ângulo C = ${C.toFixed(2)}°\n`;
+        }
+    }
+
+    if (res === "") res = "Não foi possível calcular.";
+
+    res += "\nTriângulo final:\n";
+    res += `a = ${a ?? "?"}\nA = ${A ?? "?"}°\n`;
+    res += `b = ${b ?? "?"}\nB = ${B ?? "?"}°\n`;
+    res += `c = ${c ?? "?"}\nC = ${C ?? "?"}°`;
+
+    document.getElementById("resultadoSeno").textContent = res;
+}
+</script>
+
+<h2>Lei dos Cossenos</h2>
+<p>é um teorema matemático que relaciona os lados de um triângulo qualquer, permitindo calcular um lado desconhecido se soubermos os outros dois lados e o ângulo entre eles.</p>
+<img id="triangulo_retângulo" src="img/download.png"><br><br>
+
+<script>
+    function calcularCossenos() {
+        const b = parseFloat(document.getElementById("lado_b").value);
+        const c = parseFloat(document.getElementById("lado_c").value);
+        const A = parseFloat(document.getElementById("angulo_A").value);
+    
+        if (isNaN(b) || isNaN(c) || isNaN(A)) {
+            document.getElementById("resultadoCossenos").textContent = "Digite valores válidos!";
+            return;
+        }
+    
+        // Conversão para radianos
+        const A_rad = A * Math.PI / 180;
+    
+        // Fórmula correta:
+        // a² = b² + c² - 2bc cos(A)
+        const a = Math.sqrt(b**2 + c**2 - 2 * b * c * Math.cos(A_rad));
+    
+        document.getElementById("resultadoCossenos").textContent = 
+            "Lado a = " + a.toFixed(2);
+    }
+    </script>
+    <input type="number" id="lado_b" placeholder="Lado b"><br><br>
+    <input type="number" id="lado_c" placeholder="Lado c"><br><br>
+    <input type="number" id="angulo_A" placeholder="Ângulo A (graus)"><br><br>
+    
+    <button onclick="calcularCossenos()">Calcular</button>
+    
+    <p id="resultadoCossenos"></p>
+
+</body>
+</html>
